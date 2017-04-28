@@ -1,11 +1,11 @@
 const Round = require("./Round")
 
-function RPS(){
-    this.playRound = function(p1Throw, p2Throw, ui, roundRepo){
+function RPS(roundRepo){
+    this.playRound = function(p1Throw, p2Throw, ui){
         new PlayUseCase(p1Throw, p2Throw, ui, roundRepo).execute()
     }
 
-    this.history = function(ui, roundRepo){
+    this.history = function(ui){
         if (roundRepo.isEmpty()){
             ui.noRounds()
         } else {

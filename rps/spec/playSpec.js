@@ -1,10 +1,11 @@
 const RPS = require("../src/rps")
+const FakeRoundRepo = require("./FakeRoundRepo")
 
 describe("playRound", function () {
     let ui, rps
 
     beforeEach(function () {
-        rps = new RPS()
+        rps = new RPS(new FakeRoundRepo())
     })
 
     describe("winner scenarios", function () {
