@@ -13,6 +13,7 @@
     "babel-preset-es2015": "latest"
   },
   "scripts": {
-    "compile-test": "watchify spec/playSpec.js -o compiledSpec.js -t [ babelify --presets [ es2015 react ] ]"
+    "compile-main": "watchify main.js -o compiledMain.js -t [ babelify --presets [ es2015 react ] ]",
+    "compile-test": "watchify spec/playFormSpec.js -o compiledSpec.js -t [ babelify --presets [ es2015 react ] ]"
   }
 }
