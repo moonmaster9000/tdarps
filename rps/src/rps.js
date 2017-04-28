@@ -17,14 +17,13 @@ function RPS(roundRepo){
 function PlayUseCase(p1Throw, p2Throw, ui, roundRepo){
     this.execute = function(){
         if (tie()){
-            ui.tie()
+            handleTie()
         } else if(invalid()) {
-            ui.invalid()
+            handleInvalid()
         } else if (p1Wins()){
-            ui.winner("p1")
+            handleWinner("p1")
         } else {
-            roundRepo.save(new Round(p1Throw, p2Throw, "p2"))
-            ui.winner("p2")
+            handleWinner("p2")
         }
     }
 
@@ -46,6 +45,21 @@ function PlayUseCase(p1Throw, p2Throw, ui, roundRepo){
 
     function isThrowInvalid(theThrow) {
         return !VALID_THROWS.includes(theThrow)
+    }
+
+    function handleTie() {
+        roundRepo.save(new Round(p1Throw, p2Throw, "tie"))
+        ui.tie()
+    }
+
+    function handleInvalid() {
+        roundRepo.save(new Round(p1Throw, p2Throw, "invalid"))
+        ui.invalid()
+    }
+
+    function handleWinner(winner) {
+        roundRepo.save(new Round(p1Throw, p2Throw, winner))
+        ui.winner(winner)
     }
 }
 

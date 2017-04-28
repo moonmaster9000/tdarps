@@ -21,15 +21,25 @@ describe("history", function () {
 
     describe("when rounds have been played", function () {
         it("then the UI should receive those rounds", function () {
-            let playRoundUI = {winner(){}}
+            let playRoundUI = {
+                winner(){},
+                tie(){},
+                invalid(){}
+            }
             let historyUI = jasmine.createSpyObj("historyUI", ["rounds"])
 
             rps.playRound("rock", "paper", playRoundUI)
+            rps.playRound("paper", "paper", playRoundUI)
+            rps.playRound("scissors", "paper", playRoundUI)
+            rps.playRound("rock", "sailboat", playRoundUI)
 
             rps.history(historyUI)
 
             expect(historyUI.rounds).toHaveBeenCalledWith([
-                new Round("rock", "paper", "p2")
+                new Round("rock", "paper", "p2"),
+                new Round("paper", "paper", "tie"),
+                new Round("scissors", "paper", "p1"),
+                new Round("rock", "sailboat", "invalid")
             ])
         })
 
