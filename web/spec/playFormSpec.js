@@ -1,6 +1,7 @@
 const React = require("react")
 const ReactDOM = require("react-dom")
 const PlayForm = require("../src/PlayForm")
+const {Round} = require("rps")
 
 describe("play form", function () {
     describe("when the playRound use case decides the round is invalid", function () {
@@ -57,6 +58,43 @@ describe("play form", function () {
         })
     })
 
+    describe("when the history use case says there are no rounds", function () {
+        beforeEach(function () {
+            renderApp({
+                history(ui){
+                    ui.noRounds()
+                }
+            })
+        })
+
+        it("displays NO ROUNDS", function () {
+            expect(page()).toContain("NO ROUNDS")
+        })
+    })
+
+    describe("when the history use case says there are rounds", function () {
+        const p1Throw = "p1's throw"
+        const p2Throw = "p2's throw"
+        const result = "the result"
+
+        beforeEach(function () {
+            renderApp({
+                history(ui){
+                    ui.rounds([
+                        new Round(p1Throw, p2Throw, result)
+                    ])
+                }
+            })
+        })
+
+        it("displays the round details on the page", function () {
+            expect(page()).toContain(p1Throw)
+            expect(page()).toContain(p2Throw)
+            expect(page()).toContain(result)
+        })
+
+    })
+
     describe("when the playRound use case decides p2 wins", function () {
         beforeEach(function () {
             renderApp({
@@ -99,6 +137,9 @@ describe("play form", function () {
     }
 
     function renderApp(rps) {
+        rps.history = rps.history || function(){}
+        rps.playRound = rps.playRound || function(){}
+        
         ReactDOM.render(
             <PlayForm rps={rps}/>,
             domFixture

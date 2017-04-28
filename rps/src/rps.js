@@ -63,4 +63,7 @@ function PlayUseCase(p1Throw, p2Throw, ui, roundRepo){
     }
 }
 
-module.exports = RPS
+module.exports = {
+    RPS,
+    Round,
+}

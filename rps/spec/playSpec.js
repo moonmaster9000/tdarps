@@ -1,4 +1,4 @@
-const RPS = require("../src/rps")
+const {RPS} = require("../src/rps")
 const FakeRoundRepo = require("./FakeRoundRepo")
 
 describe("playRound", function () {
