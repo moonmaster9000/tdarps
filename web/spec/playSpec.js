@@ -9,7 +9,7 @@ class PlayForm extends React.Component {
     }
 
     submitPlayForm(){
-        this.props.rps.playRound("p1 throw placeholder", "p2 throw placeholder", this)
+        this.props.rps.playRound(this.state.p1Throw, this.state.p2Throw, this)
     }
 
     invalid(){
@@ -24,9 +24,15 @@ class PlayForm extends React.Component {
         this.setState({result: `${player} Wins!!!`})
     }
 
+    inputChanged(e){
+        this.setState({[e.target.name]: e.target.value})
+    }
+
     render(){
         return <div>
                 {this.state.result}
+                <input name="p1Throw" onChange={this.inputChanged.bind(this)}/>
+                <input name="p2Throw" onChange={this.inputChanged.bind(this)}/>
                 <button onClick={this.submitPlayForm.bind(this)}></button>
             </div>
     }
@@ -105,6 +111,21 @@ describe("play form", function () {
         })
     })
 
+    it("sends the user input to the playRound use case", function () {
+        const playRoundSpy = jasmine.createSpy("playRound")
+
+        renderApp({
+            playRound: playRoundSpy
+        })
+
+        fillIn("p1Throw", "rock")
+        fillIn("p2Throw", "paper")
+
+        submitPlayForm()
+
+        expect(playRoundSpy).toHaveBeenCalledWith("rock", "paper", jasmine.any(Object))
+    })
+
     let domFixture
 
     function setupDOM() {
@@ -124,8 +145,18 @@ describe("play form", function () {
         setupDOM()
     })
 
+    afterEach(function () {
+        tearDownDOM()
+    })
+
     function page() {
         return domFixture.innerText;
+    }
+
+    function fillIn(inputName, inputValue){
+        let input = document.querySelector(`input[name='${inputName}']`)
+        input.value = inputValue
+        input.dispatchEvent(new Event("input", {bubbles: true, cancelable: false}))
     }
 
     function submitPlayForm() {
@@ -136,7 +167,4 @@ describe("play form", function () {
         domFixture.remove()
     }
 
-    afterEach(function () {
-        tearDownDOM()
-    })
 })
